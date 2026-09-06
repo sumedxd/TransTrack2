@@ -11,30 +11,30 @@ export const RiskBadge: React.FC<Props> = ({ level, size = "md", showDot = true 
   const norm = (level || "LOW").toUpperCase();
 
   const styles = {
-    CRITICAL: "bg-[#FCEEEE] text-[#992222] border-[#F3C1C1]",
-    HIGH: "bg-[#FDF4EE] text-[#A84D17] border-[#F4CFB7]",
-    MEDIUM: "bg-[#FDF8EE] text-[#8A5B00] border-[#EEDAA2]",
-    LOW: "bg-[#EEF5F0] text-[#235C3A] border-[#CCE0D2]",
-  }[norm] || "bg-[#F0EFEA] text-[#4A4E4A] border-[#DDDDD7]";
+    CRITICAL: "bg-[#FFF1F2] text-[#E11D48] border-[#FECDD3] font-bold",
+    HIGH: "bg-[#FFF7ED] text-[#EA580C] border-[#FFEDD5] font-bold",
+    MEDIUM: "bg-[#FEFCE8] text-[#CA8A04] border-[#FEF08A] font-medium",
+    LOW: "bg-[#F0FDF4] text-[#16A34A] border-[#DCFCE7] font-medium",
+  }[norm] || "bg-[#F8FAFC] text-[#64748B] border-[#E2E8F0]";
 
   const dotColors = {
-    CRITICAL: "bg-[#992222]",
-    HIGH: "bg-[#A84D17]",
-    MEDIUM: "bg-[#8A5B00]",
-    LOW: "bg-[#235C3A]",
-  }[norm] || "bg-[#6B706B]";
+    CRITICAL: "bg-[#F43F5E] ring-2 ring-[#FECDD3]",
+    HIGH: "bg-[#F5A20A] ring-2 ring-[#FFEDD5]",
+    MEDIUM: "bg-[#F5C542] ring-2 ring-[#FEF08A]",
+    LOW: "bg-[#16A66A] ring-2 ring-[#DCFCE7]",
+  }[norm] || "bg-[#94A3B8]";
 
   const sizeClasses = {
-    sm: "px-2 py-0.5 text-[10px] font-semibold tracking-wider",
-    md: "px-2.5 py-0.5 text-[11px] font-semibold tracking-wider",
-    lg: "px-3 py-1 text-xs font-bold tracking-widest",
+    sm: "px-2 py-0.5 text-[10px] tracking-wide",
+    md: "px-2.5 py-1 text-xs tracking-wide",
+    lg: "px-3.5 py-1.5 text-sm tracking-wider font-bold",
   }[size];
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-[4px] border ${styles} ${sizeClasses} uppercase font-sans`}
+      className={`inline-flex items-center gap-1.5 rounded-full border shadow-2xs ${styles} ${sizeClasses} uppercase`}
     >
-      {showDot && <span className={`h-1.5 w-1.5 rounded-full ${dotColors}`} />}
+      {showDot && <span className={`h-2 w-2 rounded-full ${dotColors} shrink-0`} />}
       {norm}
     </span>
   );

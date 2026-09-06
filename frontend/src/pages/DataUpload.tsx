@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { UploadCloud, FileSpreadsheet, Download, RefreshCw, CheckCircle2, AlertCircle } from "lucide-react";
+import { UploadCloud, FileSpreadsheet, Download, RefreshCw, CheckCircle2, AlertCircle, Database, Sparkles } from "lucide-react";
 import { uploadDataset, resetToDemo } from "../services/api";
 
 interface Props {
@@ -64,80 +64,79 @@ export const DataUpload: React.FC<Props> = ({ onUploadSuccess }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-12">
-      <div className="border-b border-[#DDDDD7] pb-4">
-        <h2 className="text-base font-bold text-[#202321] tracking-tight flex items-center gap-2">
-          <FileSpreadsheet className="w-4 h-4 text-[#214E3B]" />
-          MPLADS Ingestion Layer & Dataset Gateway
-        </h2>
-        <p className="text-xs text-[#6B706B]">
+    <div className="max-w-4xl mx-auto space-y-6 pb-16">
+      {/* Header */}
+      <div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#625BE8] bg-[#EEF2FF] px-2.5 py-0.5 rounded-md border border-[#C7D2FE]">
+            Ingestion Pipeline
+          </span>
+        </div>
+        <h1 className="text-2xl font-extrabold text-[#1E293B] tracking-tight mt-1 flex items-center gap-2">
+          Dataset Ingestion & Gateway
+        </h1>
+        <p className="text-xs text-[#64748B] mt-0.5">
           Ingest administrative work datasets in CSV, Excel (.xlsx), or JSON format with automatic schema normalization
         </p>
       </div>
 
-      {/* Notice regarding Official MOSPI eSAKSHI Portal */}
-      <div className="bg-[#FAF9F5] border-l-3 border-l-[#214E3B] border-y border-r border-[#DDDDD7] p-4 rounded-r-[6px] text-xs text-[#525752] leading-relaxed">
-        <strong className="font-bold text-[#202321] block mb-1">
-          Administrative Integration Notice: Official MOSPI eSAKSHI Portal
-        </strong>
-        The public MOSPI MPLADS eSAKSHI dashboard relies on dynamic authenticated session tables without open unauthenticated REST endpoints. In strict accordance with audit verification principles, TransTrack 2 provides this structured ingestion pipeline to import official constituency records without brittle scrapers.
-      </div>
-
       {statusMessage && (
         <div
-          className={`p-3.5 rounded-[6px] text-xs flex items-center gap-2 font-mono ${
+          className={`p-4 rounded-2xl text-xs flex items-center gap-3 font-semibold shadow-2xs ${
             statusMessage.type === "success"
-              ? "bg-[#EEF5F0] border border-[#CCE0D2] text-[#235C3A]"
-              : "bg-[#FCEEEE] border border-[#F3C1C1] text-[#992222]"
+              ? "bg-[#F0FDF4] border border-[#DCFCE7] text-[#166534]"
+              : "bg-[#FFF1F2] border border-[#FECDD3] text-[#9F1239]"
           }`}
         >
           {statusMessage.type === "success" ? (
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-[#235C3A]" />
+            <CheckCircle2 className="w-5 h-5 shrink-0 text-[#16A66A]" />
           ) : (
-            <AlertCircle className="w-4 h-4 shrink-0 text-[#992222]" />
+            <AlertCircle className="w-5 h-5 shrink-0 text-[#F43F5E]" />
           )}
           <span>{statusMessage.text}</span>
         </div>
       )}
 
       {/* Upload Box Card */}
-      <div className="bg-white border border-[#DDDDD7] rounded-[8px] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03)] space-y-4">
-        <h3 className="text-xs font-bold text-[#202321] uppercase tracking-wider">
+      <div className="bg-white border border-[#E2E8F0] rounded-3xl p-8 shadow-xs space-y-5">
+        <h3 className="text-sm font-extrabold text-[#1E293B] uppercase tracking-wider">
           Upload Work Records
         </h3>
         <form onSubmit={handleUpload} className="space-y-4">
-          <div className="border-2 border-dashed border-[#DDDDD7] hover:border-[#214E3B] rounded-[8px] p-8 text-center bg-[#FAF9F5] transition cursor-pointer relative">
+          <div className="border-2 border-dashed border-[#CBD5E1] hover:border-[#625BE8] rounded-3xl p-10 text-center bg-[#F8FAFC] transition cursor-pointer relative group">
             <input
               type="file"
               accept=".csv,.xlsx,.xls,.json"
               onChange={handleFileChange}
               className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
             />
-            <UploadCloud className="w-8 h-8 text-[#6B706B] mx-auto mb-2" />
-            <p className="text-xs font-semibold text-[#202321]">
-              {file ? file.name : "Click or drag & drop files here to upload"}
+            <div className="w-16 h-16 rounded-2xl bg-[#EEF2FF] group-hover:bg-[#625BE8] text-[#625BE8] group-hover:text-white flex items-center justify-center mx-auto mb-3 transition-colors shadow-xs">
+              <UploadCloud className="w-8 h-8" />
+            </div>
+            <p className="text-sm font-bold text-[#1E293B]">
+              {file ? file.name : "Click or drag & drop constituency files here to upload"}
             </p>
-            <p className="text-[11px] text-[#6B706B] mt-1 font-mono">
+            <p className="text-xs text-[#64748B] mt-1 font-mono">
               Accepted formats: CSV, Excel (.xlsx, .xls), JSON
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3">
             <a
               href="/api/ingest/sample-template"
               download="mplads_demo_template.csv"
-              className="inline-flex items-center gap-1.5 text-xs text-[#214E3B] font-semibold hover:underline"
+              className="inline-flex items-center gap-1.5 text-xs text-[#625BE8] font-bold hover:underline"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-4 h-4" />
               Download Standard Template CSV
             </a>
 
             <button
               type="submit"
               disabled={!file || uploading}
-              className="flex items-center gap-2 bg-[#214E3B] hover:bg-[#173729] text-white text-xs font-semibold px-4 py-2 rounded-[6px] transition disabled:opacity-40"
+              className="flex items-center gap-2 bg-[#625BE8] hover:bg-[#4F46E5] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs disabled:opacity-40 cursor-pointer"
             >
-              {uploading && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
+              {uploading && <RefreshCw className="w-4 h-4 animate-spin" />}
               {uploading ? "Analyzing Records..." : "Upload & Analyze Works"}
             </button>
           </div>
@@ -145,26 +144,26 @@ export const DataUpload: React.FC<Props> = ({ onUploadSuccess }) => {
       </div>
 
       {/* Restore Demo Dataset Card */}
-      <div className="bg-white border border-[#DDDDD7] rounded-[8px] p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-sm font-bold text-[#202321]">Reset Baseline Demo Dataset</h3>
-          <p className="text-xs text-[#6B706B] mt-0.5">
+          <h3 className="text-base font-extrabold text-[#1E293B]">Reset Baseline Demo Dataset</h3>
+          <p className="text-xs text-[#64748B] mt-0.5">
             Restores the verified 250 records across 5 states with seeded anomalies for evaluation
           </p>
         </div>
         <button
           onClick={handleReset}
           disabled={resetting}
-          className="shrink-0 flex items-center gap-1.5 bg-[#FAF9F5] hover:bg-[#EAE8E2] text-[#202321] border border-[#DDDDD7] text-xs px-3.5 py-2 rounded-[6px] font-medium transition disabled:opacity-50"
+          className="shrink-0 flex items-center gap-2 bg-[#16A66A] hover:bg-[#138A58] text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-xs disabled:opacity-50 cursor-pointer"
         >
-          <RefreshCw className={`w-3.5 h-3.5 text-[#214E3B] ${resetting ? "animate-spin" : ""}`} />
-          {resetting ? "Resetting..." : "Reset to Demo Dataset"}
+          <RefreshCw className={`w-4 h-4 ${resetting ? "animate-spin" : ""}`} />
+          {resetting ? "Resetting..." : "Reset to 250 Demo Baseline"}
         </button>
       </div>
 
       {/* Schema Reference Table */}
-      <div className="bg-white border border-[#DDDDD7] rounded-[8px] p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] text-xs space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#202321]">
+      <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-xs text-xs space-y-3">
+        <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#1E293B]">
           Recognized Canonical Schema Attributes
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 font-mono text-[11px]">
@@ -174,8 +173,8 @@ export const DataUpload: React.FC<Props> = ({ onUploadSuccess }) => {
             "released_amount", "expenditure", "balance_amount", "work_status",
             "sanction_date", "completion_date", "financial_year", "latitude", "longitude"
           ].map((f) => (
-            <div key={f} className="p-2 bg-[#FAF9F5] rounded border border-[#E5E4DE] text-[#202321]">
-              <span className="font-semibold text-[#214E3B]">{f}</span>
+            <div key={f} className="p-2.5 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] text-[#1E293B]">
+              <span className="font-bold text-[#625BE8]">{f}</span>
             </div>
           ))}
         </div>

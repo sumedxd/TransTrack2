@@ -2,67 +2,85 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --bg-base: #F6F5F1;
+  --bg-base: #F7F8FA;
   --bg-surface: #FFFFFF;
-  --bg-surface-hover: #ECEBE5;
-  --text-primary: #202321;
-  --text-secondary: #6B706B;
-  --border-subtle: #DDDDD7;
-  --accent-forest: #214E3B;
-  --accent-forest-hover: #173729;
-  --accent-olive: #68785B;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --border-subtle: #E2E8F0;
+
+  /* Vibrant Accent Palette */
+  --accent-purple: #625BE8;
+  --accent-teal: #16B8A6;
+  --accent-orange: #F5A20A;
+  --accent-pink: #F43F5E;
+  --accent-green: #16A66A;
+  --accent-yellow: #F5C542;
 }
 
 @layer base {
   body {
-    background-color: #F6F5F1;
-    color: #202321;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #F7F8FA;
+    color: #1E293B;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Editorial figures and monospaced codes */
   .font-numeric {
     font-variant-numeric: tabular-nums lining-nums;
   }
 }
 
-/* Neutral Leaflet Map styling */
+/* Custom interactive smooth transitions */
+.transition-smooth {
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease;
+}
+
+/* Card hover lift effect */
+.card-hover {
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08), 0 4px 8px -4px rgba(0, 0, 0, 0.04);
+}
+
+/* Modern Leaflet Map styling */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  background: #EAE8E2;
-  border-radius: 8px;
+  background: #F1F5F9;
+  border-radius: 16px;
   font-family: inherit;
 }
 
 .leaflet-popup-content-wrapper {
   background: #FFFFFF !important;
-  color: #202321 !important;
-  border: 1px solid #DDDDD7;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  color: #1E293B !important;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  padding: 4px;
 }
 
 .leaflet-popup-tip {
   background: #FFFFFF !important;
 }
 
-/* Subtle neutral scrollbars */
+/* Sleek minimalist scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F0EFEA;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D2D1C9;
-  border-radius: 3px;
+  background: #CBD5E1;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #BAB9B1;
+  background: #94A3B8;
 }
 
 /* Print styles for audit reports */

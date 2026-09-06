@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Database,
   Sliders,
+  ShieldCheck,
 } from "lucide-react";
 
 export type NavItem =
@@ -34,42 +35,42 @@ export const Sidebar: React.FC<Props> = ({
   qualityIssueCount = 0,
 }) => {
   const mainNav = [
-    { id: "overview", label: "Overview", icon: LayoutDashboard },
-    { id: "works", label: "Works Register", icon: FileSpreadsheet },
+    { id: "overview", label: "Dashboard", icon: LayoutDashboard },
+    { id: "works", label: "Works", icon: FileSpreadsheet },
     {
       id: "investigations",
       label: "Investigations",
       icon: SearchCode,
       badge: priorityCount > 0 ? priorityCount : undefined,
-      badgeColor: "bg-[#FDF4EE] text-[#A84D17] border-[#F4CFB7]",
+      badgeColor: "bg-[#FFF1F2] text-[#E11D48] border-[#FECDD3]",
     },
-    { id: "map", label: "Spatial Map", icon: MapPin },
+    { id: "map", label: "Map", icon: MapPin },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     {
       id: "data-quality",
       label: "Data Quality",
       icon: CheckCircle2,
       badge: qualityIssueCount > 0 ? qualityIssueCount : undefined,
-      badgeColor: "bg-[#FDF8EE] text-[#8A5B00] border-[#EEDAA2]",
+      badgeColor: "bg-[#FEFCE8] text-[#CA8A04] border-[#FEF08A]",
     },
   ];
 
   const secondaryNav = [
     { id: "ingest", label: "Data Ingestion", icon: Database },
-    { id: "methodology", label: "Methodology", icon: Sliders },
+    { id: "methodology", label: "Settings", icon: Sliders },
   ];
 
   return (
-    <aside className="w-56 bg-white border-r border-[#DDDDD7] flex flex-col justify-between shrink-0 min-h-[calc(100vh-57px)] select-none">
-      <div className="p-3 space-y-6">
+    <aside className="w-60 bg-white border-r border-[#E2E8F0] flex flex-col justify-between shrink-0 min-h-[calc(100vh-65px)] select-none">
+      <div className="p-4 space-y-6">
         {/* Main Section */}
         <div>
-          <div className="px-3 mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#6B706B]">
-              Monitoring
+          <div className="px-3 mb-2.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+              Navigation
             </span>
           </div>
-          <nav className="space-y-0.5">
+          <nav className="space-y-1">
             {mainNav.map((item) => {
               const Icon = item.icon;
               const isActive = activeItem === item.id;
@@ -77,23 +78,27 @@ export const Sidebar: React.FC<Props> = ({
                 <button
                   key={item.id}
                   onClick={() => onSelect(item.id as NavItem)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-[6px] text-xs font-medium transition ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer ${
                     isActive
-                      ? "bg-[#EEF5F0] text-[#214E3B] font-semibold"
-                      : "text-[#525752] hover:bg-[#F6F5F1] hover:text-[#202321]"
+                      ? "bg-[#16A66A] text-white shadow-xs"
+                      : "text-[#475569] hover:bg-[#F1F5F9] hover:text-[#1E293B]"
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-3">
                     <Icon
                       className={`w-4 h-4 ${
-                        isActive ? "text-[#214E3B]" : "text-[#6B706B]"
+                        isActive ? "text-white" : "text-[#64748B]"
                       }`}
                     />
                     <span>{item.label}</span>
                   </div>
                   {item.badge !== undefined && (
                     <span
-                      className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold border ${item.badgeColor}`}
+                      className={`px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+                        isActive
+                          ? "bg-white text-[#16A66A] border-white"
+                          : item.badgeColor
+                      }`}
                     >
                       {item.badge}
                     </span>
@@ -106,12 +111,12 @@ export const Sidebar: React.FC<Props> = ({
 
         {/* Administration Section */}
         <div>
-          <div className="px-3 mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#6B706B]">
+          <div className="px-3 mb-2.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
               Administration
             </span>
           </div>
-          <nav className="space-y-0.5">
+          <nav className="space-y-1">
             {secondaryNav.map((item) => {
               const Icon = item.icon;
               const isActive = activeItem === item.id;
@@ -119,15 +124,15 @@ export const Sidebar: React.FC<Props> = ({
                 <button
                   key={item.id}
                   onClick={() => onSelect(item.id as NavItem)}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[6px] text-xs font-medium transition ${
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer ${
                     isActive
-                      ? "bg-[#EEF5F0] text-[#214E3B] font-semibold"
-                      : "text-[#525752] hover:bg-[#F6F5F1] hover:text-[#202321]"
+                      ? "bg-[#16A66A] text-white shadow-xs"
+                      : "text-[#475569] hover:bg-[#F1F5F9] hover:text-[#1E293B]"
                   }`}
                 >
                   <Icon
                     className={`w-4 h-4 ${
-                      isActive ? "text-[#214E3B]" : "text-[#6B706B]"
+                      isActive ? "text-white" : "text-[#64748B]"
                     }`}
                   />
                   <span>{item.label}</span>
@@ -138,15 +143,19 @@ export const Sidebar: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* Footer Info in Sidebar */}
-      <div className="p-3 border-t border-[#DDDDD7] text-[11px] text-[#6B706B] font-mono space-y-1">
-        <div className="flex items-center justify-between">
-          <span>Engine:</span>
-          <span className="text-[#202321] font-semibold">Multi-Agent v2.0</span>
+      {/* Footer Multi-Agent Engine Status */}
+      <div className="p-4 border-t border-[#E2E8F0] m-3 bg-[#F8FAFC] rounded-2xl text-xs text-[#64748B] space-y-1.5">
+        <div className="flex items-center gap-2 text-[#1E293B] font-bold">
+          <ShieldCheck className="w-4 h-4 text-[#16A66A]" />
+          <span>Active Audit System</span>
         </div>
-        <div className="flex items-center justify-between">
-          <span>Isolation Forest:</span>
-          <span className="text-[#214E3B] font-semibold">Fitted (n=100)</span>
+        <div className="flex items-center justify-between text-[11px]">
+          <span>Specialist Agents:</span>
+          <span className="font-semibold text-[#16A66A]">5 Online</span>
+        </div>
+        <div className="flex items-center justify-between text-[11px]">
+          <span>ML Outlier Engine:</span>
+          <span className="font-semibold text-[#625BE8]">Isolation Forest</span>
         </div>
       </div>
     </aside>

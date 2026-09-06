@@ -1,57 +1,79 @@
 import React from "react";
-import { RefreshCw, UserCheck, Shield } from "lucide-react";
+import { RefreshCw, Bell, Search, UserCheck } from "lucide-react";
 
 interface Props {
   onResetDemo: () => void;
   resetting: boolean;
+  onSearchFocus?: () => void;
 }
 
-export const Header: React.FC<Props> = ({ onResetDemo, resetting }) => {
+export const Header: React.FC<Props> = ({ onResetDemo, resetting, onSearchFocus }) => {
   return (
-    <header className="bg-white border-b border-[#DDDDD7] px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+    <header className="bg-white border-b border-[#E2E8F0] px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-xs">
       {/* Left Branding */}
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-[6px] bg-[#214E3B] text-white flex items-center justify-center font-bold text-sm tracking-wider shadow-xs">
+      <div className="flex items-center gap-3.5">
+        <div className="w-10 h-10 rounded-xl bg-[#16A66A] text-white flex items-center justify-center font-extrabold text-base tracking-tight shadow-sm">
           TT
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-base font-bold text-[#202321] tracking-tight">
-              TRANSTRACK 2
+            <h1 className="text-lg font-extrabold text-[#1E293B] tracking-tight">
+              TransTrack 2
             </h1>
-            <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-[4px] bg-[#F4F3EE] text-[#555B55] border border-[#DDDDD7]">
-              Audit Cell
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#ECFDF5] text-[#16A66A] border border-[#A7F3D0]">
+              Auditing Cell
             </span>
           </div>
-          <p className="text-[11px] text-[#6B706B] tracking-normal">
+          <p className="text-xs text-[#64748B] font-medium">
             MPLADS Risk & Investigation Platform
           </p>
         </div>
       </div>
 
-      {/* Right Meta & Actions */}
-      <div className="flex items-center gap-4 text-xs text-[#6B706B]">
-        <div className="hidden sm:flex items-center gap-2 border-r border-[#DDDDD7] pr-4">
-          <span className="w-2 h-2 rounded-full bg-[#214E3B]" />
-          <span className="font-mono text-[11px] text-[#4A4E4A]">
-            Demo Baseline Active (250 Works)
-          </span>
+      {/* Right Search, Notifications, Profile & Actions */}
+      <div className="flex items-center gap-3 text-sm">
+        {/* Quick Search Shortcut */}
+        <button
+          onClick={onSearchFocus}
+          className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#64748B] border border-[#E2E8F0] text-xs font-medium transition cursor-pointer"
+        >
+          <Search className="w-3.5 h-3.5 text-[#94A3B8]" />
+          <span>Quick search works...</span>
+          <kbd className="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#CBD5E1] text-[#94A3B8]">
+            ⌘K
+          </kbd>
+        </button>
+
+        {/* Notifications Icon with Indicator */}
+        <div className="relative">
+          <button
+            className="w-9 h-9 rounded-xl bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#64748B] border border-[#E2E8F0] flex items-center justify-center transition"
+            title="Notifications"
+          >
+            <Bell className="w-4 h-4 text-[#64748B]" />
+          </button>
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#F43F5E] rounded-full ring-2 ring-white" />
         </div>
 
-        <div className="hidden md:flex items-center gap-1.5 border-r border-[#DDDDD7] pr-4">
-          <UserCheck className="w-3.5 h-3.5 text-[#6B706B]" />
-          <span className="text-[11px] text-[#202321] font-medium">
-            Reviewer: CAG Audit Division
-          </span>
+        {/* User / Reviewer Badge */}
+        <div className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
+          <div className="w-6 h-6 rounded-full bg-[#E0E7FF] text-[#625BE8] flex items-center justify-center font-bold text-xs">
+            <UserCheck className="w-3.5 h-3.5 text-[#625BE8]" />
+          </div>
+          <div className="text-left leading-tight">
+            <span className="text-xs font-bold text-[#1E293B] block">CAG Auditor</span>
+            <span className="text-[10px] text-[#64748B] block">Lead Division</span>
+          </div>
         </div>
 
+        {/* Reset / Reload Demo Button */}
         <button
           onClick={onResetDemo}
           disabled={resetting}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#F6F5F1] hover:bg-[#ECEBE5] text-[#202321] border border-[#DDDDD7] transition text-xs font-medium disabled:opacity-50"
-          title="Reset database to verified 250 demo records"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#16A66A] hover:bg-[#138A58] text-white font-semibold shadow-xs transition text-xs disabled:opacity-50 cursor-pointer"
+          title="Reset database to 250 baseline records"
         >
-          <RefreshCw className={`w-3.5 h-3.5 text-[#214E3B] ${resetting ? "animate-spin" : ""}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${resetting ? "animate-spin" : ""}`} />
           <span>{resetting ? "Resetting..." : "Reset Data"}</span>
         </button>
       </div>

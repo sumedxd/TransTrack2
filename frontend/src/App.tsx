@@ -38,6 +38,11 @@ export function App() {
     setSelectedWorkId(null);
   };
 
+  const handleNavigate = (item: NavItem) => {
+    setSelectedWorkId(null);
+    setActiveItem(item);
+  };
+
   const handleResetDemo = async () => {
     if (!window.confirm("Restore the verified 250 baseline demo records with seeded anomalies?")) {
       return;
@@ -62,11 +67,18 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F5F1] text-[#202321] flex flex-col font-sans">
-      {/* Institutional Top Header */}
-      <Header onResetDemo={handleResetDemo} resetting={resetting} />
+    <div className="min-h-screen bg-[#F7F8FA] text-[#1E293B] flex flex-col font-sans">
+      {/* Top Header */}
+      <Header
+        onResetDemo={handleResetDemo}
+        resetting={resetting}
+        onSearchFocus={() => {
+          setSelectedWorkId(null);
+          setActiveItem("works");
+        }}
+      />
 
-      {/* Desktop Analytics Body: Sidebar + Main Content */}
+      {/* Main App Layout: Sidebar + Main Content */}
       <div className="flex-1 flex w-full">
         <Sidebar
           activeItem={selectedWorkId ? "investigations" : activeItem}
@@ -79,7 +91,7 @@ export function App() {
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
+        <main className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full">
           {selectedWorkId ? (
             <Investigation
               workId={selectedWorkId}
@@ -89,13 +101,25 @@ export function App() {
           ) : (
             <>
               {activeItem === "overview" && (
-                <Dashboard key={refreshKey} onSelectWork={handleSelectWork} />
+                <Dashboard
+                  key={refreshKey}
+                  onSelectWork={handleSelectWork}
+                  onNavigate={handleNavigate}
+                />
               )}
               {activeItem === "works" && (
-                <Dashboard key={refreshKey} onSelectWork={handleSelectWork} />
+                <Dashboard
+                  key={refreshKey}
+                  onSelectWork={handleSelectWork}
+                  onNavigate={handleNavigate}
+                />
               )}
               {activeItem === "investigations" && (
-                <Dashboard key={refreshKey} onSelectWork={handleSelectWork} />
+                <Dashboard
+                  key={refreshKey}
+                  onSelectWork={handleSelectWork}
+                  onNavigate={handleNavigate}
+                />
               )}
               {activeItem === "map" && (
                 <MapPage onSelectWork={handleSelectWork} />
@@ -117,11 +141,11 @@ export function App() {
         </main>
       </div>
 
-      {/* Institutional Footer */}
-      <footer className="bg-white border-t border-[#DDDDD7] py-3 text-center text-xs text-[#6B706B] font-mono no-print">
+      {/* Clean Modern Footer */}
+      <footer className="bg-white border-t border-[#E2E8F0] py-4 text-center text-xs text-[#64748B] font-medium no-print">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>TransTrack 2 &bull; Decision-Support & Audit-Prioritization System</span>
-          <span>Version 2.0.0 &bull; CAG Monitoring Prototype</span>
+          <span className="font-mono text-[#94A3B8]">Version 2.0.0 &bull; CAG Monitoring Prototype</span>
         </div>
       </footer>
     </div>
