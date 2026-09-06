@@ -74,48 +74,14 @@ const cleanAndShortenFinding = (raw: string): string => {
   s = s.replace(/Unsupervised Isolation Forest algorithm classified this work as an anomaly\s*\(Anomaly score:\s*([0-9.]+)\/100\)/i, "Isolation Forest flagged operational anomaly (Score: $1/100)");
   s = s.replace(/Chronological impossibility:\s*/i, "Chronological Inversion: ");
 
+  // 5. Clean up awkward parenthesis spacing and multiple spaces
+  s = s.replace(/\(\s+/g, "(").replace(/\s+\)/g, ")").replace(/\s{2,}/g, " ");
+
   return s.trim();
 };
 
 const renderCleanFinding = (text: string) => {
-  const clean = cleanAndShortenFinding(text);
-
-  const tokens = clean.split(/(₹\s*[-0-9.]+\s*(?:L|Cr|Lakh|Crore)?|\d+(?:\.\d+)?(?:×|x)\s*the peer median|\d+(?:\.\d+)?(?:×|x)|\d+(?:\.\d+)?%|\b\d+\s*days\b|\b(?:Isolation Forest|peer median|overrun|outlier|Negative balance|Chronological Inversion)\b)/gi);
-
-  return (
-    <span>
-      {tokens.map((token, i) => {
-        if (!token) return null;
-        const lower = token.toLowerCase();
-
-        // Currency, Peer Median, Isolation Forest
-        if (token.startsWith("₹") || lower.includes("peer median") || lower.includes("isolation forest")) {
-          return (
-            <span key={i} className="font-extrabold text-[#F5C542]">
-              {token}
-            </span>
-          );
-        }
-        // Multipliers, Percentages, Days
-        if (lower.includes("day") || lower.includes("x") || lower.includes("×") || token.includes("%")) {
-          return (
-            <span key={i} className="font-extrabold text-[#38BDF8]">
-              {token}
-            </span>
-          );
-        }
-        // Critical alerts
-        if (lower.includes("overrun") || lower.includes("outlier") || lower.includes("negative balance") || lower.includes("chronological inversion")) {
-          return (
-            <span key={i} className="font-extrabold text-[#F43F5E]">
-              {token}
-            </span>
-          );
-        }
-        return <span key={i}>{token}</span>;
-      })}
-    </span>
-  );
+  return cleanAndShortenFinding(text);
 };
 
 export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork }) => {
@@ -414,8 +380,8 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
                 <span className="font-mono text-xs font-extrabold text-[#F5A20A] bg-amber-500/20 px-2 py-0.5 rounded-lg shrink-0">
                   0{idx + 1}
                 </span>
-                <p className="text-xs text-slate-200 leading-relaxed">
-                  {renderCleanFinding(finding)}
+                <p className="text-xs text-white leading-relaxed">
+                  {cleanAndShortenFinding(finding)}
                 </p>
               </div>
             ))}
