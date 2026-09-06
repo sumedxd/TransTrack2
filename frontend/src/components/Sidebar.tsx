@@ -34,7 +34,6 @@ export const Sidebar: React.FC<Props> = ({
   qualityIssueCount = 0,
 }) => {
   const mainNav = [
-    { id: "overview", label: "Dashboard", icon: LayoutDashboard },
     {
       id: "investigations",
       label: "Investigations",
@@ -42,6 +41,7 @@ export const Sidebar: React.FC<Props> = ({
       badge: priorityCount > 0 ? priorityCount : undefined,
       badgeColor: "bg-[#FFF1F2] text-[#E11D48] border-[#FECDD3]",
     },
+    { id: "overview", label: "Dashboard", icon: LayoutDashboard },
     { id: "map", label: "Map", icon: MapPin },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     {

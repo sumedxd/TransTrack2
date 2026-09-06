@@ -12,7 +12,7 @@ import { Settings } from "./pages/Settings";
 import { fetchSummary } from "./services/api";
 
 export function App() {
-  const [activeItem, setActiveItem] = useState<NavItem>("overview");
+  const [activeItem, setActiveItem] = useState<NavItem>("investigations");
   const [selectedWorkId, setSelectedWorkId] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const [priorityCount, setPriorityCount] = useState<number>(0);
@@ -46,7 +46,7 @@ export function App() {
   const handleDataChanged = () => {
     setRefreshKey((k) => k + 1);
     setSelectedWorkId(null);
-    setActiveItem("overview");
+    setActiveItem("investigations");
   };
 
   return (
