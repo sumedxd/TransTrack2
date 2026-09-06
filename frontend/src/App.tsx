@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import { Sidebar, type NavItem } from "./components/Sidebar";
 import { Dashboard } from "./pages/Dashboard";
+import { InvestigationsPage } from "./pages/InvestigationsPage";
 import { Investigation } from "./pages/Investigation";
 import { MapPage } from "./pages/MapPage";
 import { AnalyticsPage } from "./pages/AnalyticsPage";
@@ -80,17 +81,10 @@ export function App() {
                   key={refreshKey}
                   onSelectWork={handleSelectWork}
                   onNavigate={handleNavigate}
-                  viewMode="overview"
                 />
               )}
               {activeItem === "investigations" && (
-                <Dashboard
-                  key={`inv-${refreshKey}`}
-                  onSelectWork={handleSelectWork}
-                  onNavigate={handleNavigate}
-                  initialRiskFilter="HIGH"
-                  viewMode="investigations"
-                />
+                <InvestigationsPage onSelectWork={handleSelectWork} />
               )}
               {activeItem === "map" && (
                 <MapPage onSelectWork={handleSelectWork} />
