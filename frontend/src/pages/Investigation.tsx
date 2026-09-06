@@ -11,7 +11,9 @@ import {
   User,
   Calculator,
   ChevronRight,
+  ChevronDown,
   ShieldCheck,
+  ShieldAlert,
   AlertTriangle,
   Coins,
   Clock,
@@ -40,6 +42,7 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
   const [data, setData] = useState<WorkInvestigationResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [showExecutive, setShowExecutive] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "specialist" | "peers" | "map" | "ledger"
   >("overview");
@@ -293,8 +296,9 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
       </div>
 
       {/* 3. LEAD INVESTIGATOR AI SYNTHESIS: High-Contrast Distinct Section */}
-      <section className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] text-white rounded-3xl p-6 sm:p-8 shadow-md">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/80 pb-6">
+      <section className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] text-white rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-slate-700/80 pb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#625BE8] flex items-center justify-center shadow-xs">
               <Sparkles className="w-5 h-5 text-white" />
@@ -302,58 +306,121 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-extrabold tracking-tight">LEAD INVESTIGATOR</h2>
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-white/10 text-emerald-400">
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-white/10 text-emerald-400 border border-white/10">
                   Multi-Agent Synthesis
                 </span>
               </div>
               <p className="text-xs text-slate-400">Deterministic synthesis of 5 specialist agents</p>
             </div>
           </div>
+        </div>
 
-          {/* Recommended Action Badge */}
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-bold">
-              Recommended Action:
+        {/* PRIMARY CORROBORATING FINDINGS (Main Focal Point) */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs uppercase font-extrabold text-slate-300 tracking-wider flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#F5A20A]" />
+              Primary Corroborating Findings
             </span>
-            <span
-              className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wider uppercase shadow-xs ${
-                report.requires_physical_verification
-                  ? "bg-[#F43F5E] text-white ring-4 ring-rose-500/20"
-                  : "bg-[#16A66A] text-white"
-              }`}
-            >
-              {report.recommendation || "PRIORITY HUMAN VERIFICATION"}
-            </span>
+            <span className="text-[11px] text-slate-400">Key empirical variances</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {(report.key_findings || why_flagged || []).map((finding, idx) => {
+              // Shorten and highlight important words & numbers
+              const parts = finding
+                .replace(/^Substantial project cost deviation from peer median:\s*/i, "")
+                .replace(/^Work marked completed with unusually brief duration:\s*/i, "")
+                .split(/(₹[\d,.]+(?:\s*(?:L|Cr|Lakh|Crore))?|\d+(?:\.\d+)?(?:×|x)\s*the peer median|\d+(?:\.\d+)?(?:×|x)|\d+(?:\.\d+)?%|\d+\s*days|\b(?:peer median|Isolation Forest|cost overrun|outlier|brief duration|rapidly|concentration)\b)/gi);
+
+              return (
+                <div
+                  key={idx}
+                  className="flex items-start gap-3 bg-white/5 hover:bg-white/8 border border-white/10 p-4 rounded-2xl transition"
+                >
+                  <span className="font-mono text-xs font-extrabold text-[#F5A20A] bg-amber-500/20 px-2 py-0.5 rounded-lg shrink-0">
+                    0{idx + 1}
+                  </span>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {parts.map((part, i) => {
+                      if (!part) return null;
+                      const lower = part.toLowerCase();
+                      if (part.startsWith("₹") || lower.includes("peer median") || lower.includes("outlier") || lower.includes("isolation forest")) {
+                        return (
+                          <strong key={i} className="text-[#F5A20A] font-extrabold bg-amber-400/15 px-1.5 py-0.5 rounded">
+                            {part}
+                          </strong>
+                        );
+                      }
+                      if (lower.includes("day") || lower.includes("x") || lower.includes("×") || part.includes("%")) {
+                        return (
+                          <strong key={i} className="text-[#38BDF8] font-extrabold bg-sky-400/15 px-1.5 py-0.5 rounded">
+                            {part}
+                          </strong>
+                        );
+                      }
+                      if (lower.includes("overrun") || lower.includes("brief") || lower.includes("rapidly")) {
+                        return (
+                          <strong key={i} className="text-[#F43F5E] font-bold">
+                            {part}
+                          </strong>
+                        );
+                      }
+                      return <span key={i}>{part}</span>;
+                    })}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Synthesis Executive Assessment */}
-        <div className="mt-6">
-          <span className="text-xs uppercase font-bold text-slate-400 tracking-wider block mb-1">
-            Executive Assessment
-          </span>
-          <p className="text-base text-slate-200 font-medium leading-relaxed bg-white/5 p-4 rounded-2xl border border-white/10">
-            "{report.executive_summary}"
-          </p>
+        {/* Collapsible Executive Assessment Dropdown */}
+        <div className="pt-1">
+          <button
+            type="button"
+            onClick={() => setShowExecutive(!showExecutive)}
+            className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-300 font-bold transition cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <FileText className="w-4 h-4 text-[#625BE8]" />
+              <span>Full Executive Assessment Synthesis</span>
+            </span>
+            <span className="flex items-center gap-1.5 text-[11px] text-slate-400">
+              <span>{showExecutive ? "Hide" : "View Dropdown"}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showExecutive ? "rotate-180" : ""}`} />
+            </span>
+          </button>
+
+          {showExecutive && (
+            <div className="mt-2.5 p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-slate-200 leading-relaxed animate-in fade-in duration-150">
+              "{report.executive_summary}"
+            </div>
+          )}
         </div>
 
-        {/* Numbered Primary Findings */}
-        <div className="mt-6">
-          <span className="text-xs uppercase font-bold text-slate-400 tracking-wider block mb-3">
-            Primary Corroborating Findings
-          </span>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {(report.key_findings || why_flagged || []).map((finding, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-3 bg-white/5 border border-white/10 p-3.5 rounded-2xl"
-              >
-                <span className="font-mono text-xs font-extrabold text-[#F5A20A] bg-amber-500/10 px-2 py-0.5 rounded-md shrink-0">
-                  0{idx + 1}
-                </span>
-                <span className="text-xs text-slate-200 leading-snug">{finding}</span>
-              </div>
-            ))}
+        {/* RECOMMENDED ACTION BANNER AT THE BOTTOM */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4.5 rounded-2xl bg-white/5 border border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-rose-500/20 text-[#F43F5E] flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                Official Auditor Action Directive
+              </span>
+              <span className="text-xs font-bold text-white">Recommended Course of Action</span>
+            </div>
+          </div>
+
+          <div
+            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold tracking-wider uppercase text-center shadow-xs ${
+              report.requires_physical_verification
+                ? "bg-[#F43F5E] text-white ring-4 ring-rose-500/20"
+                : "bg-[#16A66A] text-white"
+            }`}
+          >
+            {report.recommendation || "PRIORITY PHYSICAL AUDIT & VERIFICATION"}
           </div>
         </div>
       </section>
