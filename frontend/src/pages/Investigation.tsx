@@ -171,7 +171,7 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
 
   const isPriority = work.risk_level === "CRITICAL" || work.risk_level === "HIGH";
 
-  // Specialist Agents Configuration
+  // Specialist Agents Configuration (4 Core Analytical Domains)
   const agents = [
     {
       key: "financial_agent",
@@ -194,17 +194,6 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
       solidCol: "bg-[#625BE8]",
       role: "Timeline & Velocity Analysis",
       resp: agent_responses?.progress_agent,
-    },
-    {
-      key: "geographic_agent",
-      name: "Geographic Agent",
-      icon: MapPin,
-      accentBg: "bg-[#F0FDFA]",
-      borderCol: "border-[#CCFBF1]",
-      textColor: "text-[#0D9488]",
-      solidCol: "bg-[#16B8A6]",
-      role: "Spatial & Implementing Agency Clustering",
-      resp: agent_responses?.geographic_agent,
     },
     {
       key: "anomaly_agent",
@@ -356,7 +345,7 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
                   Multi-Agent Synthesis
                 </span>
               </div>
-              <p className="text-xs text-slate-400">Deterministic synthesis of 5 specialist agents</p>
+              <p className="text-xs text-slate-400">Deterministic synthesis of 4 specialist analytical agents</p>
             </div>
           </div>
         </div>
@@ -438,7 +427,7 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
         </div>
       </section>
 
-      {/* 4. SPECIALIST AGENTS: 5 Colorful Interactive Cards */}
+      {/* 4. SPECIALIST AGENTS: 4 Interactive Cards */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -452,7 +441,7 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {agents.map((agent) => {
             const Icon = agent.icon;
             const resp = agent.resp;
