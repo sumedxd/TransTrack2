@@ -38,6 +38,86 @@ interface Props {
   onSelectWork: (id: string) => void;
 }
 
+// Helper to clean, shorten, and format finding text across all investigations
+const cleanAndShortenFinding = (raw: string): string => {
+  if (!raw) return "";
+  let s = raw.trim();
+
+  // 1. Remove redundant regulatory boilerplate sentences
+  s = s.replace(/\s*In MPLADS guidelines,.*$/i, "");
+  s = s.replace(/\s*Government civil procurement,.*$/i, "");
+  s = s.replace(/\s*The combination of project cost,.*$/i, "");
+  s = s.replace(/\s*Physical on-site inspection is recommended.*$/i, "");
+  s = s.replace(/\s*All findings must be corroborated.*$/i, "");
+  s = s.replace(/\s*Decision function:\s*[-0-9.]+\)?/gi, "");
+
+  // 2. Remove redundant category prefixes
+  s = s.replace(/^Data Quality Issue:\s*[a-z0-9_]+:\s*/i, "Data Quality: ");
+  s = s.replace(/^Multidimensional statistical outlier detected by Isolation Forest:\s*/i, "");
+  s = s.replace(/^Substantial project cost deviation from peer median:\s*/i, "");
+  s = s.replace(/^Expenditure exceeds administrative sanction limit:\s*/i, "");
+  s = s.replace(/^Work marked completed with unusually brief duration:\s*/i, "");
+  s = s.replace(/^Work execution delayed beyond statutory threshold:\s*/i, "");
+  s = s.replace(/^High spatial fund concentration detected:\s*/i, "");
+  s = s.replace(/^Implementing agency concentration detected:\s*/i, "");
+
+  // 3. Format large unwieldy numbers like ₹3,250,000.00 to ₹32.50 L
+  s = s.replace(/₹\s*([0-9,]+(?:\.[0-9]+)?)/g, (_, numStr) => {
+    const n = parseFloat(numStr.replace(/,/g, ""));
+    if (isNaN(n)) return `₹${numStr}`;
+    if (Math.abs(n) >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;
+    if (Math.abs(n) >= 100000) return `₹${(n / 100000).toFixed(2)} L`;
+    return `₹${n.toLocaleString("en-IN")}`;
+  });
+
+  // 4. Simplify specific phrases
+  s = s.replace(/Unsupervised Isolation Forest algorithm classified this work as an anomaly\s*\(Anomaly score:\s*([0-9.]+)\/100\)/i, "Isolation Forest flagged operational anomaly (Score: $1/100)");
+  s = s.replace(/Chronological impossibility:\s*/i, "Chronological Inversion: ");
+
+  return s.trim();
+};
+
+const renderCleanFinding = (text: string) => {
+  const clean = cleanAndShortenFinding(text);
+
+  const tokens = clean.split(/(₹\s*[-0-9.]+\s*(?:L|Cr|Lakh|Crore)?|\d+(?:\.\d+)?(?:×|x)\s*the peer median|\d+(?:\.\d+)?(?:×|x)|\d+(?:\.\d+)?%|\b\d+\s*days\b|\b(?:Isolation Forest|peer median|overrun|outlier|Negative balance|Chronological Inversion)\b)/gi);
+
+  return (
+    <span>
+      {tokens.map((token, i) => {
+        if (!token) return null;
+        const lower = token.toLowerCase();
+
+        // Currency, Peer Median, Isolation Forest
+        if (token.startsWith("₹") || lower.includes("peer median") || lower.includes("isolation forest")) {
+          return (
+            <span key={i} className="font-extrabold text-[#F5C542]">
+              {token}
+            </span>
+          );
+        }
+        // Multipliers, Percentages, Days
+        if (lower.includes("day") || lower.includes("x") || lower.includes("×") || token.includes("%")) {
+          return (
+            <span key={i} className="font-extrabold text-[#38BDF8]">
+              {token}
+            </span>
+          );
+        }
+        // Critical alerts
+        if (lower.includes("overrun") || lower.includes("outlier") || lower.includes("negative balance") || lower.includes("chronological inversion")) {
+          return (
+            <span key={i} className="font-extrabold text-[#F43F5E]">
+              {token}
+            </span>
+          );
+        }
+        return <span key={i}>{token}</span>;
+      })}
+    </span>
+  );
+};
+
 export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork }) => {
   const [data, setData] = useState<WorkInvestigationResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -326,52 +406,19 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {(report.key_findings || why_flagged || []).map((finding, idx) => {
-              // Shorten and highlight important words & numbers
-              const parts = finding
-                .replace(/^Substantial project cost deviation from peer median:\s*/i, "")
-                .replace(/^Work marked completed with unusually brief duration:\s*/i, "")
-                .split(/(₹[\d,.]+(?:\s*(?:L|Cr|Lakh|Crore))?|\d+(?:\.\d+)?(?:×|x)\s*the peer median|\d+(?:\.\d+)?(?:×|x)|\d+(?:\.\d+)?%|\d+\s*days|\b(?:peer median|Isolation Forest|cost overrun|outlier|brief duration|rapidly|concentration)\b)/gi);
-
-              return (
-                <div
-                  key={idx}
-                  className="flex items-start gap-3 bg-white/5 hover:bg-white/8 border border-white/10 p-4 rounded-2xl transition"
-                >
-                  <span className="font-mono text-xs font-extrabold text-[#F5A20A] bg-amber-500/20 px-2 py-0.5 rounded-lg shrink-0">
-                    0{idx + 1}
-                  </span>
-                  <p className="text-xs text-slate-200 leading-relaxed">
-                    {parts.map((part, i) => {
-                      if (!part) return null;
-                      const lower = part.toLowerCase();
-                      if (part.startsWith("₹") || lower.includes("peer median") || lower.includes("outlier") || lower.includes("isolation forest")) {
-                        return (
-                          <strong key={i} className="text-[#F5A20A] font-extrabold bg-amber-400/15 px-1.5 py-0.5 rounded">
-                            {part}
-                          </strong>
-                        );
-                      }
-                      if (lower.includes("day") || lower.includes("x") || lower.includes("×") || part.includes("%")) {
-                        return (
-                          <strong key={i} className="text-[#38BDF8] font-extrabold bg-sky-400/15 px-1.5 py-0.5 rounded">
-                            {part}
-                          </strong>
-                        );
-                      }
-                      if (lower.includes("overrun") || lower.includes("brief") || lower.includes("rapidly")) {
-                        return (
-                          <strong key={i} className="text-[#F43F5E] font-bold">
-                            {part}
-                          </strong>
-                        );
-                      }
-                      return <span key={i}>{part}</span>;
-                    })}
-                  </p>
-                </div>
-              );
-            })}
+            {(report.key_findings || why_flagged || []).map((finding, idx) => (
+              <div
+                key={idx}
+                className="flex items-start gap-3 bg-white/5 hover:bg-white/8 border border-white/10 p-4 rounded-2xl transition"
+              >
+                <span className="font-mono text-xs font-extrabold text-[#F5A20A] bg-amber-500/20 px-2 py-0.5 rounded-lg shrink-0">
+                  0{idx + 1}
+                </span>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  {renderCleanFinding(finding)}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -483,11 +530,11 @@ export const Investigation: React.FC<Props> = ({ workId, onBack, onSelectWork })
                   {/* Top Finding Text */}
                   <div className="my-4 bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-white">
                     <p className="text-xs font-bold text-[#1E293B] leading-snug">
-                      {topFinding?.title || "Conforms to expected peer baseline."}
+                      {cleanAndShortenFinding(topFinding?.title || "Conforms to expected peer baseline.")}
                     </p>
                     {topFinding?.description && (
                       <p className="text-[11px] text-[#64748B] mt-1 leading-relaxed line-clamp-2">
-                        {topFinding.description}
+                        {cleanAndShortenFinding(topFinding.description)}
                       </p>
                     )}
                   </div>
