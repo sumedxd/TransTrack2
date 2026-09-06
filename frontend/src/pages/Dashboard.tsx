@@ -140,7 +140,7 @@ export const Dashboard: React.FC<Props> = ({ onSelectWork, onNavigate }) => {
 
   return (
     <div className="space-y-8 pb-16">
-      {/* 1. HERO SECTION: Bright, Light Green with Geometric Flair */}
+      {/* 1. HERO MISSION STATEMENT BANNER */}
       <section className="relative overflow-hidden bg-[#ECFDF5] border border-[#A7F3D0] rounded-3xl p-8 md:p-10 shadow-xs">
         {/* Abstract geometric background elements */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#16A66A]/10 rounded-full blur-2xl -mr-20 -mt-20 pointer-events-none" />
@@ -150,124 +150,33 @@ export const Dashboard: React.FC<Props> = ({ onSelectWork, onNavigate }) => {
           <div className="w-8 h-8 rounded-xl bg-[#16A66A] -rotate-6" />
         </div>
 
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[#16A66A] font-bold text-xs uppercase tracking-wider shadow-2xs border border-[#A7F3D0] mb-3">
+        <div className="relative z-10 max-w-4xl space-y-3.5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white text-[#16A66A] font-extrabold text-xs uppercase tracking-wider shadow-2xs border border-[#A7F3D0]">
             <span className="w-2 h-2 rounded-full bg-[#16A66A]" />
-            MPLADS Audit Portfolio Active
+            MPLADS Risk & Audit Intelligence
           </div>
+          
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#064E3B] tracking-tight leading-tight">
-            Monitoring MPLADS <br className="hidden sm:inline" />
-            for Greater Impact
+            Monitoring MPLADS for Greater Impact
           </h1>
-          <p className="text-base text-[#047857] mt-3 font-medium leading-relaxed">
-            Identify unusual works. Understand multi-agent evidence. Prioritize physical audit verification.
+
+          <p className="text-base sm:text-lg text-[#047857] font-semibold leading-relaxed">
+            Automatically identify MPLADS works that deserve closer scrutiny, explain exactly why they were flagged, and help authorities prioritize physical verification/audit.
           </p>
-        </div>
-      </section>
 
-      {/* 2. MAIN NAVIGATION ACTION CARDS: 4 Large Colorful Clickable Tiles */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-[#94A3B8]">
-            Quick Exploration
-          </h2>
-          <span className="text-xs text-[#64748B]">Click any tile to jump to section</span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* WORKS - Purple */}
-          <div
-            onClick={() => onNavigate ? onNavigate("works") : setRiskFilter("")}
-            className="group relative bg-[#625BE8] text-white rounded-3xl p-6 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.01] overflow-hidden"
-          >
-            <div className="flex justify-between items-start">
-              <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center backdrop-blur-xs">
-                <FileSpreadsheet className="w-6 h-6 text-white" />
-              </div>
-              <span className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center group-hover:translate-x-1.5 group-hover:bg-white group-hover:text-[#625BE8] transition-all">
-                <ArrowRight className="w-4 h-4" />
-              </span>
+          {/* Key Audit Pillars */}
+          <div className="flex flex-wrap gap-2.5 pt-2">
+            <div className="inline-flex items-center gap-2 bg-white/85 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-[#A7F3D0] text-xs font-bold text-[#064E3B]">
+              <span className="w-2 h-2 rounded-full bg-[#625BE8]" />
+              Automated Anomaly Detection
             </div>
-            <div className="mt-8">
-              <span className="text-xs font-bold uppercase tracking-wider text-white/75 block">
-                Works Register
-              </span>
-              <h3 className="text-2xl font-extrabold tracking-tight mt-1">WORKS</h3>
-              <p className="text-xs text-white/85 mt-1 font-medium">
-                Explore 250 MPLADS works & expenditure
-              </p>
+            <div className="inline-flex items-center gap-2 bg-white/85 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-[#A7F3D0] text-xs font-bold text-[#064E3B]">
+              <span className="w-2 h-2 rounded-full bg-[#F5A20A]" />
+              Explainable Evidence Traceability
             </div>
-          </div>
-
-          {/* INVESTIGATIONS - Teal */}
-          <div
-            onClick={() => onNavigate ? onNavigate("investigations") : setRiskFilter("HIGH")}
-            className="group relative bg-[#16B8A6] text-white rounded-3xl p-6 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.01] overflow-hidden"
-          >
-            <div className="flex justify-between items-start">
-              <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center backdrop-blur-xs">
-                <SearchCode className="w-6 h-6 text-white" />
-              </div>
-              <span className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center group-hover:translate-x-1.5 group-hover:bg-white group-hover:text-[#16B8A6] transition-all">
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </div>
-            <div className="mt-8">
-              <span className="text-xs font-bold uppercase tracking-wider text-white/75 block">
-                Multi-Agent Audit
-              </span>
-              <h3 className="text-2xl font-extrabold tracking-tight mt-1">INVESTIGATIONS</h3>
-              <p className="text-xs text-white/85 mt-1 font-medium">
-                Review flagged works & proof
-              </p>
-            </div>
-          </div>
-
-          {/* MAP VIEW - Orange */}
-          <div
-            onClick={() => onNavigate ? onNavigate("map") : null}
-            className="group relative bg-[#F5A20A] text-white rounded-3xl p-6 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.01] overflow-hidden"
-          >
-            <div className="flex justify-between items-start">
-              <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center backdrop-blur-xs">
-                <MapPin className="w-6 h-6 text-white" />
-              </div>
-              <span className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center group-hover:translate-x-1.5 group-hover:bg-white group-hover:text-[#F5A20A] transition-all">
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </div>
-            <div className="mt-8">
-              <span className="text-xs font-bold uppercase tracking-wider text-white/75 block">
-                Geographic Clustering
-              </span>
-              <h3 className="text-2xl font-extrabold tracking-tight mt-1">MAP VIEW</h3>
-              <p className="text-xs text-white/85 mt-1 font-medium">
-                Explore works geographically
-              </p>
-            </div>
-          </div>
-
-          {/* ANALYTICS - Pink/Red */}
-          <div
-            onClick={() => onNavigate ? onNavigate("analytics") : null}
-            className="group relative bg-[#F43F5E] text-white rounded-3xl p-6 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.01] overflow-hidden"
-          >
-            <div className="flex justify-between items-start">
-              <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center backdrop-blur-xs">
-                <BarChart3 className="w-6 h-6 text-white" />
-              </div>
-              <span className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center group-hover:translate-x-1.5 group-hover:bg-white group-hover:text-[#F43F5E] transition-all">
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </div>
-            <div className="mt-8">
-              <span className="text-xs font-bold uppercase tracking-wider text-white/75 block">
-                Statistical Insights
-              </span>
-              <h3 className="text-2xl font-extrabold tracking-tight mt-1">ANALYTICS</h3>
-              <p className="text-xs text-white/85 mt-1 font-medium">
-                Discover patterns & distributions
-              </p>
+            <div className="inline-flex items-center gap-2 bg-white/85 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-[#A7F3D0] text-xs font-bold text-[#064E3B]">
+              <span className="w-2 h-2 rounded-full bg-[#F43F5E]" />
+              Prioritized Physical Verification
             </div>
           </div>
         </div>
