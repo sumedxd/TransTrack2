@@ -41,9 +41,16 @@ import type { NavItem } from "../components/Sidebar";
 interface Props {
   onSelectWork: (workId: string) => void;
   onNavigate?: (item: NavItem) => void;
+  initialRiskFilter?: string;
+  viewMode?: "overview" | "investigations";
 }
 
-export const Dashboard: React.FC<Props> = ({ onSelectWork, onNavigate }) => {
+export const Dashboard: React.FC<Props> = ({
+  onSelectWork,
+  onNavigate,
+  initialRiskFilter = "",
+  viewMode = "overview",
+}) => {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [works, setWorks] = useState<Work[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -51,7 +58,7 @@ export const Dashboard: React.FC<Props> = ({ onSelectWork, onNavigate }) => {
 
   // Filters & Pagination
   const [search, setSearch] = useState<string>("");
-  const [riskFilter, setRiskFilter] = useState<string>("");
+  const [riskFilter, setRiskFilter] = useState<string>(initialRiskFilter);
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [districtFilter, setDistrictFilter] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("risk_score");
@@ -364,10 +371,14 @@ export const Dashboard: React.FC<Props> = ({ onSelectWork, onNavigate }) => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-extrabold text-[#1E293B]">
-              Priority Works Register
+              {viewMode === "investigations"
+                ? "Active Investigations Register"
+                : "Priority Works Register"}
             </h3>
             <p className="text-xs text-[#64748B] mt-0.5">
-              Auditable work entities ordered by analytical multi-agent risk score
+              {viewMode === "investigations"
+                ? "Flagged MPLADS works undergoing multi-agent AI audit synthesis and empirical scrutiny"
+                : "Auditable work entities ordered by analytical multi-agent risk score"}
             </p>
           </div>
 

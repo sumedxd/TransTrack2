@@ -13,7 +13,6 @@ import {
 
 export type NavItem =
   | "overview"
-  | "works"
   | "investigations"
   | "map"
   | "analytics"
@@ -36,7 +35,6 @@ export const Sidebar: React.FC<Props> = ({
 }) => {
   const mainNav = [
     { id: "overview", label: "Dashboard", icon: LayoutDashboard },
-    { id: "works", label: "Works", icon: FileSpreadsheet },
     {
       id: "investigations",
       label: "Investigations",

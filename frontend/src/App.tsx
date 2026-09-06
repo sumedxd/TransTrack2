@@ -8,12 +8,11 @@ import { AnalyticsPage } from "./pages/AnalyticsPage";
 import { DataQualityPage } from "./pages/DataQualityPage";
 import { DataUpload } from "./pages/DataUpload";
 import { Settings } from "./pages/Settings";
-import { resetToDemo, fetchSummary } from "./services/api";
+import { fetchSummary } from "./services/api";
 
 export function App() {
   const [activeItem, setActiveItem] = useState<NavItem>("overview");
   const [selectedWorkId, setSelectedWorkId] = useState<string | null>(null);
-  const [resetting, setResetting] = useState<boolean>(false);
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const [priorityCount, setPriorityCount] = useState<number>(0);
 
@@ -43,23 +42,6 @@ export function App() {
     setActiveItem(item);
   };
 
-  const handleResetDemo = async () => {
-    if (!window.confirm("Restore the verified 250 baseline demo records with seeded anomalies?")) {
-      return;
-    }
-    try {
-      setResetting(true);
-      await resetToDemo();
-      setSelectedWorkId(null);
-      setRefreshKey((k) => k + 1);
-      alert("Baseline dataset successfully restored.");
-    } catch (e: any) {
-      alert(`Reset failed: ${e.message}`);
-    } finally {
-      setResetting(false);
-    }
-  };
-
   const handleDataChanged = () => {
     setRefreshKey((k) => k + 1);
     setSelectedWorkId(null);
@@ -68,15 +50,8 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#F7F8FA] text-[#1E293B] flex flex-col font-sans">
-      {/* Top Header */}
-      <Header
-        onResetDemo={handleResetDemo}
-        resetting={resetting}
-        onSearchFocus={() => {
-          setSelectedWorkId(null);
-          setActiveItem("works");
-        }}
-      />
+      {/* Top Header: Title & Icon Only */}
+      <Header />
 
       {/* Main App Layout: Sidebar + Main Content */}
       <div className="flex-1 flex w-full">
@@ -105,20 +80,16 @@ export function App() {
                   key={refreshKey}
                   onSelectWork={handleSelectWork}
                   onNavigate={handleNavigate}
-                />
-              )}
-              {activeItem === "works" && (
-                <Dashboard
-                  key={refreshKey}
-                  onSelectWork={handleSelectWork}
-                  onNavigate={handleNavigate}
+                  viewMode="overview"
                 />
               )}
               {activeItem === "investigations" && (
                 <Dashboard
-                  key={refreshKey}
+                  key={`inv-${refreshKey}`}
                   onSelectWork={handleSelectWork}
                   onNavigate={handleNavigate}
+                  initialRiskFilter="HIGH"
+                  viewMode="investigations"
                 />
               )}
               {activeItem === "map" && (
